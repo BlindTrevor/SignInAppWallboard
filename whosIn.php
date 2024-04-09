@@ -4,7 +4,16 @@
     $key = 'XXXXXXXXXXXXXXXXXXXXXXXX';
     $secret = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
     $siteId = 'XXXXX';
+    // If you want to limit which IP Addresses can see this page, set $limitIpAddress
+    // to true and add the allowed IPs into the $allowedIPs array
+    $limitIpAddress = true;
+    $allowedIPs = array("111.111.111.111", "222.222.222.222", "333.333.333.333", "444.444.444.444", "555.555.555.555");
 ?>
+<?php
+    if (($limitIpAddress == true) && (!in_array ($_SERVER['REMOTE_ADDR'], $allowedIPs))) {
+    echo "<b>Error: </b>" . $_SERVER['REMOTE_ADDR'] . " is not an allowed IP Address.";
+    exit();
+}
 <!DOCTYPE html>
 <html>
 	<head>
