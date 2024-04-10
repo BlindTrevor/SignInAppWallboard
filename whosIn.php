@@ -74,6 +74,7 @@
 				$visitorCount = array_count_values(array_column($visitors, 'status'))["signed_in"];
 				if($visitorCount > 0){
 					echo "<h2>".$groupName."</h2>";
+					usort($visitors, fn($a, $b) => $a['name'] <=> $b['name']);
 					foreach ($visitors as $person) {
 						if($person['status'] == "signed_in") {
 						echo '<div class="tile">';
