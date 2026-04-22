@@ -115,7 +115,7 @@ Or use a `.env` loader library if your framework supports it.
 - **Auth errors**: Check API key/secret values; ensure Basic Auth header is built as `base64(key:secret)`.
 - **cURL not installed/enabled**: Enable `php-curl` extension and restart web server.
 - **IP blocked message**: Disable `limitIpAddress` or add your client IP to `allowedIPs`.
-- **Missing profile photos still show as broken images**: Confirm `assets/default-person.svg` exists and is accessible by the web server.
+- **Default placeholder image not loading**: Confirm `assets/default-person.svg` exists and is accessible by the web server.
 - **JSON decode issues**: Log `$response` to diagnose API or network errors.
 
 ---
