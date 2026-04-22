@@ -85,7 +85,7 @@
 						}
 						echo '<div class="tile">';
 						echo '<img src="' . htmlspecialchars($photoUrl, ENT_QUOTES, 'UTF-8') . '" alt="' . htmlspecialchars($person['name'], ENT_QUOTES, 'UTF-8') . '">';
-						echo '<h3>' . $person['name'] . '</h3>';
+						echo '<h3>' . htmlspecialchars($person['name'], ENT_QUOTES, 'UTF-8') . '</h3>';
 						echo '</div>';
 						}
 					}
