@@ -38,6 +38,7 @@ A simple PHP page that shows **who is currently signed in** at a given site usin
 - Optional **IP allow‑list** to restrict page visibility.
 - Simple, readable tile layout with circular avatar images.
 - Uses a generic placeholder avatar when `photo_url` is missing.
+- Auto-refreshes data every 60 seconds and includes a **Refresh now** button without reloading the full page.
 
 ## Prerequisites
 - PHP **7.4+** (tested with 7.4/8.x)
@@ -117,6 +118,7 @@ Or use a `.env` loader library if your framework supports it.
 - **IP blocked message**: Disable `limitIpAddress` or add your client IP to `allowedIPs`.
 - **Default placeholder image not loading**: Confirm `assets/default-person.svg` exists and is accessible by the web server.
 - **JSON decode issues**: Log `$response` to diagnose API or network errors.
+- **Refresh status shows API failure**: Verify API credentials/site ID and check server outbound HTTPS access.
 
 ---
 
