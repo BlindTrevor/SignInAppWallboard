@@ -79,7 +79,7 @@
 					usort($visitors, fn($a, $b) => $a['name'] <=> $b['name']);
 					foreach ($visitors as $person) {
 						if($person['status'] == "signed_in") {
-						$photoUrl = isset($person['photo_url']) ? trim((string)$person['photo_url']) : '';
+						$photoUrl = isset($person['photo_url']) ? trim($person['photo_url']) : '';
 						if ($photoUrl === '') {
 							$photoUrl = $defaultPhotoUrl;
 						}
