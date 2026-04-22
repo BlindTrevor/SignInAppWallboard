@@ -79,14 +79,14 @@
 					usort($visitors, fn($a, $b) => $a['name'] <=> $b['name']);
 					foreach ($visitors as $person) {
 						if($person['status'] == "signed_in") {
-						$photoUrl = isset($person['photo_url']) ? trim($person['photo_url']) : '';
-						if ($photoUrl === '') {
-							$photoUrl = $defaultPhotoUrl;
-						}
-						echo '<div class="tile">';
-						echo '<img src="' . htmlspecialchars($photoUrl, ENT_QUOTES, 'UTF-8') . '" alt="' . htmlspecialchars($person['name'], ENT_QUOTES, 'UTF-8') . '">';
-						echo '<h3>' . htmlspecialchars($person['name'], ENT_QUOTES, 'UTF-8') . '</h3>';
-						echo '</div>';
+								$photoUrl = isset($person['photo_url']) ? trim($person['photo_url']) : '';
+								if ($photoUrl === '') {
+									$photoUrl = $defaultPhotoUrl;
+								}
+								echo '<div class="tile">';
+								echo '<img src="' . htmlspecialchars($photoUrl, ENT_QUOTES, 'UTF-8') . '" alt="' . htmlspecialchars($person['name'], ENT_QUOTES, 'UTF-8') . '">';
+								echo '<h3>' . htmlspecialchars($person['name'], ENT_QUOTES, 'UTF-8') . '</h3>';
+								echo '</div>';
 						}
 					}
 				}
