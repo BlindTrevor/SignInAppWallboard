@@ -7,7 +7,7 @@
     $defaultPhotoUrl = 'assets/default-person.svg';
     // If you want to limit which IP Addresses can see this page, set $limitIpAddress
     // to true and add the allowed IPs into the $allowedIPs array
-    $limitIpAddress = true;
+    $limitIpAddress = false;
     $allowedIPs = array("111.111.111.111", "222.222.222.222", "333.333.333.333", "444.444.444.444", "555.555.555.555");
 ?>
 <?php
@@ -17,8 +17,10 @@
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html translate="no">
 	<head>
+		<meta name="google" content="notranslate" />
+		<meta name="robots" content="notranslate">
 		<title>Staff Members In The Building</title>
 		<style>
 			body {
