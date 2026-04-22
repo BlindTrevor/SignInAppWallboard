@@ -4,6 +4,7 @@
     $key = 'XXXXXXXXXXXXXXXXXXXXXXXX';
     $secret = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
     $siteId = 'XXXXX';
+    $defaultPhotoUrl = 'assets/default-person.svg';
     // If you want to limit which IP Addresses can see this page, set $limitIpAddress
     // to true and add the allowed IPs into the $allowedIPs array
     $limitIpAddress = true;
@@ -14,6 +15,7 @@
     echo "<b>Error: </b>" . $_SERVER['REMOTE_ADDR'] . " is not an allowed IP Address.";
     exit();
 }
+?>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -77,8 +79,12 @@
 					usort($visitors, fn($a, $b) => $a['name'] <=> $b['name']);
 					foreach ($visitors as $person) {
 						if($person['status'] == "signed_in") {
+						$photoUrl = isset($person['photo_url']) ? trim((string)$person['photo_url']) : '';
+						if ($photoUrl === '') {
+							$photoUrl = $defaultPhotoUrl;
+						}
 						echo '<div class="tile">';
-						echo '<img src="' . $person['photo_url'] . '" alt="' . $person['name'] . '">';
+						echo '<img src="' . htmlspecialchars($photoUrl, ENT_QUOTES, 'UTF-8') . '" alt="' . htmlspecialchars($person['name'], ENT_QUOTES, 'UTF-8') . '">';
 						echo '<h3>' . $person['name'] . '</h3>';
 						echo '</div>';
 						}

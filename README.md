@@ -37,6 +37,7 @@ A simple PHP page that shows **who is currently signed in** at a given site usin
 - Sorts names alphabetically within each group.
 - Optional **IP allow‑list** to restrict page visibility.
 - Simple, readable tile layout with circular avatar images.
+- Uses a generic placeholder avatar when `photo_url` is missing.
 
 ## Prerequisites
 - PHP **7.4+** (tested with 7.4/8.x)
@@ -114,11 +115,10 @@ Or use a `.env` loader library if your framework supports it.
 - **Auth errors**: Check API key/secret values; ensure Basic Auth header is built as `base64(key:secret)`.
 - **cURL not installed/enabled**: Enable `php-curl` extension and restart web server.
 - **IP blocked message**: Disable `limitIpAddress` or add your client IP to `allowedIPs`.
-- **Slow image loads**: The `photo_url` is loaded from the API response; consider caching or a placeholder.
+- **Missing profile photos**: A built-in generic placeholder (`assets/default-person.svg`) is shown when `photo_url` is empty.
 - **JSON decode issues**: Log `$response` to diagnose API or network errors.
 
 ---
 
 ## License
 This example is provided "as is" without warranty. Adapt and integrate into your own project as needed. Check your Sign In App agreement and API terms before production use.
-
