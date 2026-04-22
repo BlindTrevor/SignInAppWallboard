@@ -112,6 +112,7 @@ if ((isset($_GET['ajax'])) && ($_GET['ajax'] === '1')) {
 				font-family: Open Sans;
 				color: #1d1c31;
 				background-color: #1d1c31;
+				padding-bottom: 48px;
 			}
 			h1 {
 				color: #b2176f;
@@ -138,22 +139,32 @@ if ((isset($_GET['ajax'])) && ($_GET['ajax'] === '1')) {
 				height: 125px;
 				border-radius: 50%;
 			}
-			.refresh-controls {
-				margin-bottom: 20px;
+			.refresh-meta {
+				position: fixed;
+				left: 12px;
+				bottom: 12px;
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				font-size: 12px;
+				color: rgba(255, 255, 255, 0.7);
+				z-index: 10;
 			}
 			.refresh-controls button {
-				background-color: #0b86c8;
-				color: #ffffff;
-				border: 0;
-				padding: 10px 16px;
-				border-radius: 6px;
+				background-color: transparent;
+				color: rgba(255, 255, 255, 0.72);
+				border: 1px solid rgba(255, 255, 255, 0.35);
+				padding: 3px 8px;
+				border-radius: 4px;
 				cursor: pointer;
-				font-size: 14px;
+				font-size: 12px;
+			}
+			.refresh-controls button:disabled {
+				opacity: 0.6;
+				cursor: default;
 			}
 			.refresh-status {
-				color: #ffffff;
-				font-size: 14px;
-				margin: 10px 0 20px;
+				font-size: 12px;
 			}
 			.empty-state {
 				color: #ffffff;
@@ -162,17 +173,19 @@ if ((isset($_GET['ajax'])) && ($_GET['ajax'] === '1')) {
 	</head>
 	<body>
 		<h1>Who's In</h1>
-		<div class="refresh-controls">
-			<button type="button" id="refreshButton">Refresh now</button>
-		</div>
-		<div class="refresh-status" id="refreshStatus">
-			<?php
-                if ($apiResult['error']) {
-                    echo htmlspecialchars($apiResult['error'], ENT_QUOTES, 'UTF-8');
-                } else {
-                    echo 'Last updated: just now';
-                }
-            ?>
+		<div class="refresh-meta">
+			<div class="refresh-status" id="refreshStatus">
+				<?php
+                    if ($apiResult['error']) {
+                        echo htmlspecialchars($apiResult['error'], ENT_QUOTES, 'UTF-8');
+                    } else {
+                        echo 'Last updated: just now';
+                    }
+                ?>
+			</div>
+			<div class="refresh-controls">
+				<button type="button" id="refreshButton">Refresh now</button>
+			</div>
 		</div>
 		<div id="peopleContainer"><?php echo renderSignedInHtml($apiResult['groups'], $defaultPhotoUrl); ?></div>
 		<script>
