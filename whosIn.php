@@ -33,13 +33,13 @@ function fetchTodayData($baseUrl, $siteId, $key, $secret)
         return ['groups' => [], 'error' => 'Unable to contact Sign In App API: ' . $curlError];
     }
 
+    if ($httpStatus >= 400) {
+        return ['groups' => [], 'error' => 'Sign In App API request failed (HTTP ' . $httpStatus . ').'];
+    }
+
     $array = json_decode($response, true);
     if (!is_array($array)) {
         return ['groups' => [], 'error' => 'Invalid response from Sign In App API.'];
-    }
-
-    if ($httpStatus >= 400) {
-        return ['groups' => [], 'error' => 'Sign In App API request failed (HTTP ' . $httpStatus . ').'];
     }
 
     return ['groups' => $array, 'error' => null];
@@ -179,14 +179,27 @@ if ((isset($_GET['ajax'])) && ($_GET['ajax'] === '1')) {
 			const refreshButton = document.getElementById('refreshButton');
 			const refreshStatus = document.getElementById('refreshStatus');
 			const peopleContainer = document.getElementById('peopleContainer');
-			const refreshUrl = <?php echo json_encode($_SERVER['PHP_SELF'] . '?ajax=1'); ?>;
+			const refreshRequestUrl = new URL(window.location.href);
+			refreshRequestUrl.searchParams.set('ajax', '1');
+			const refreshUrl = refreshRequestUrl.toString();
+			const refreshIntervalMs = 60000;
+			const refreshTimeoutMs = 10000;
+			let refreshTimer = null;
+			let isRefreshing = false;
 
 			async function refreshData() {
+				if (isRefreshing) {
+					return;
+				}
+				isRefreshing = true;
 				refreshButton.disabled = true;
+				const controller = new AbortController();
+				const timeout = setTimeout(() => controller.abort(), refreshTimeoutMs);
 				try {
 					const response = await fetch(refreshUrl, {
 						headers: { 'Accept': 'application/json' },
-						cache: 'no-store'
+						cache: 'no-store',
+						signal: controller.signal
 					});
 					if (!response.ok) {
 						throw new Error('Refresh failed (HTTP ' + response.status + ').');
@@ -198,18 +211,49 @@ if ((isset($_GET['ajax'])) && ($_GET['ajax'] === '1')) {
 					if (payload.error) {
 						refreshStatus.textContent = payload.error;
 					} else {
-						const updateTime = payload.fetchedAt ? new Date(payload.fetchedAt) : new Date();
-						refreshStatus.textContent = 'Last updated: ' + updateTime.toLocaleTimeString();
+						if (payload.fetchedAt) {
+							const updateTime = new Date(payload.fetchedAt);
+							refreshStatus.textContent = 'Last updated: ' + updateTime.toLocaleTimeString();
+						} else {
+							refreshStatus.textContent = 'Last updated: just now';
+						}
 					}
 				} catch (error) {
-					refreshStatus.textContent = error.message;
+					refreshStatus.textContent = error.name === 'AbortError'
+						? 'Refresh timed out.'
+						: error.message;
 				} finally {
+					clearTimeout(timeout);
 					refreshButton.disabled = false;
+					isRefreshing = false;
 				}
 			}
 
 			refreshButton.addEventListener('click', refreshData);
-			setInterval(refreshData, 60000);
+
+			function startRefreshTimer() {
+				if (!refreshTimer) {
+					refreshTimer = setInterval(refreshData, refreshIntervalMs);
+				}
+			}
+
+			function stopRefreshTimer() {
+				if (refreshTimer) {
+					clearInterval(refreshTimer);
+					refreshTimer = null;
+				}
+			}
+
+			document.addEventListener('visibilitychange', () => {
+				if (document.hidden) {
+					stopRefreshTimer();
+					return;
+				}
+				refreshData();
+				startRefreshTimer();
+			});
+
+			startRefreshTimer();
 		</script>
 	</body>
 </html>
